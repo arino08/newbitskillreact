@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 // using in-page anchors for scrolling to sections
 
 function Header() {
@@ -11,10 +12,10 @@ function Header() {
     <header>
       <div className="container">
         <div className="header-content">
-          <a href="#" className="logo" aria-label="Bitskill India home">
+          <Link to={"/"} className="logo" aria-label="Bitskill India home">
             <div className="logo-icon">B</div>
             Bitskill India
-          </a>
+          </Link>
             <nav aria-label="Main navigation">
               <ul>
                 <li><a href="#hero">Home</a></li>
@@ -51,8 +52,8 @@ function Header() {
               </button>
             </div>
             <div className="auth-buttons">
-              <a className="btn btn-outline" href="/login">Login</a>
-              <a className="btn btn-outline" href="/signup">Sign Up</a>
+              <Link className="btn btn-outline" to="/login">Login</Link>
+              <Link className="btn btn-outline" to="/signup">Sign Up</Link>
             </div>
           </div>
         </div>
