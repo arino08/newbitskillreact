@@ -196,12 +196,15 @@ nav a:hover {
   padding: 80px 0 40px;
   margin: 0;
   text-align: center;
-  background: linear-gradient(
+  background-image: url("./assets/bg.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0.12),
     rgba(255, 255, 255, 0.03)
   );
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px); */
   position: relative;
 }
 .hero::before {

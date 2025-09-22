@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import './App.css'
@@ -8,11 +8,12 @@ import SignupPage from './components/Pages/SignupPage'
 
 function App() {
   const location = useLocation();
-  const hideHeader = location.pathname.startsWith('/login') || location.pathname.startsWith('/signup');
+  const trimHeader = location.pathname.startsWith('/login') || location.pathname.startsWith('/signup');
+  const displayNavLinks = trimHeader ? false : true;
 
   return (
     <div id="main-page" className="page-container" style={{ width: '100%' }}>
-      {!hideHeader && <Header />}
+      <Header displayNavLinks={displayNavLinks} />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />

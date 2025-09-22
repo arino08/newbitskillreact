@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import NavLinks from "./Pages/components/NavLinks";
+import Search from "./Pages/components/Search";
+import AuthLinks from "./Pages/components/AuthLinks";
 // using in-page anchors for scrolling to sections
 
-function Header() {
+function Header({displayNavLinks}) {
   const [searchActive, setSearchActive] = useState(false);
 
   const openSearch = () => setSearchActive(true);
@@ -16,44 +19,18 @@ function Header() {
             <div className="logo-icon">B</div>
             Bitskill India
           </Link>
-            <nav aria-label="Main navigation">
-              <ul>
-                <li><a href="#hero">Home</a></li>
-                <li><a href="#trending-gigs">Find Gigs</a></li>
-                <li><a href="#subscribe">Post a Project</a></li>
-                <li><a href="#how-it-works">How It Works</a></li>
-                <li><a href="#key-features">About</a></li>
-              </ul>
-            </nav>
+
+          {displayNavLinks && <NavLinks />}
+
           <div className="header-actions">
-            <div
-              className={`search-wrapper${searchActive ? " active" : ""}`}
-              title="Search Bitskill"
-            >
-              <input
-                className="search-input"
-                type="text"
-                placeholder="Search Bitskill..."
-                aria-label="Search"
-              />
-              <button
-                className="search-icon"
-                onClick={openSearch}
-                aria-label="Open search"
-              >
-                <i className="fas fa-search"></i>
-              </button>
-              <button
-                className="close-btn"
-                onClick={closeSearch}
-                aria-label="Close search"
-              >
-                <i className="fas fa-times"></i>
-              </button>
-            </div>
+            {displayNavLinks && <Search
+              searchActive={searchActive}
+              openSearch={openSearch}
+              closeSearch={closeSearch}
+            />}
+
             <div className="auth-buttons">
-              <Link className="btn btn-outline" to="/login">Login</Link>
-              <Link className="btn btn-outline" to="/signup">Sign Up</Link>
+              <AuthLinks/>
             </div>
           </div>
         </div>
