@@ -4,15 +4,26 @@ import './Background.css';
 export default function Background() {
   return (
     <div className="bg-scene" aria-hidden>
+      {/* Clean gradient overlay */}
       <div className="bg-gradient" />
-      <div className="bg-noise" />
-      <div className="bg-blobs">
-        <div className="blob blob-1" />
-        <div className="blob blob-2" />
-        <div className="blob blob-3" />
+      
+      {/* Subtle grid pattern */}
+      <div className="grid-pattern" />
+      
+      {/* Simple floating particles */}
+      <div className="particles">
+        <div className="particle particle-1" />
+        <div className="particle particle-2" />
+        <div className="particle particle-3" />
+        <div className="particle particle-4" />
+        <div className="particle particle-5" />
       </div>
-      <div className="grid-overlay" />
-      <div className="particles" />
+      
+      {/* Subtle accent lines */}
+      <div className="accent-lines">
+        <div className="accent-line accent-line-1" />
+        <div className="accent-line accent-line-2" />
+      </div>
     </div>
   );
 }

@@ -5,6 +5,9 @@ import './App.css'
 import HomePage from './components/Pages/HomePage'
 import LoginPage from './components/Pages/LoginPage'
 import SignupPage from './components/Pages/SignupPage'
+import GigPostPage from './components/Pages/GigPostPage'
+import AllGigsPage from './components/Pages/AllGigsPage'
+import GigDetailsPage from './components/Pages/GigDetailsPage'
 import Background from './components/Background'
 
 function App() {
@@ -21,6 +24,9 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/post-gig" element={<GigPostPage />} />
+          <Route path="/gigs" element={<AllGigsPage />} />
+          <Route path="/gigs/:id" element={<GigDetailsPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
   {!isAuthRoute && <Footer />}

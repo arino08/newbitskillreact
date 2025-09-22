@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import './SignupPage.css';
 import { useAuth } from '../auth/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { authAPI, handleAPIError } from '../../services/api';
 
 export default function SignupPage() {
   const [form, setForm] = useState({ fullName: '', email: '', password: '', role: 'student' });
@@ -35,12 +36,27 @@ export default function SignupPage() {
       setError('Please choose a stronger password');
       return;
     }
+    
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 800));
-    setLoading(false);
     setError('');
-    login({ email: form.email, name: form.fullName });
-    navigate('/');
+    
+    try {
+      const userData = {
+        fullName: form.fullName,
+        email: form.email,
+        password: form.password,
+        role: form.role
+      };
+      
+      const data = await authAPI.register(userData);
+      login(data.user, data.token);
+      navigate('/');
+    } catch (error) {
+      const errorMessage = handleAPIError(error);
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -49,13 +65,15 @@ export default function SignupPage() {
         <div className="signup-content">
           <div className="left-section">
             <div className="left-content">
-              <h2>Join Bitskill India</h2>
-              <p>Build your portfolio with real-world projects and micro-internships.</p>
+              <h2>Start Your Journey Today</h2>
+              <p>Join a community of ambitious students transforming their academic potential into professional success through real-world experience.</p>
               <ul className="features">
-                <li><i className="fas fa-check" aria-hidden /> Hands-on experience</li>
-                <li><i className="fas fa-check" aria-hidden /> Flexible timelines</li>
-                <li><i className="fas fa-check" aria-hidden /> Mentorship and feedback</li>
-                <li><i className="fas fa-check" aria-hidden /> Completion certificate</li>
+                <li><i className="fas fa-lightbulb" aria-hidden /> Get hands-on with cutting-edge projects</li>
+                <li><i className="fas fa-network-wired" aria-hidden /> Network with industry professionals</li>
+                <li><i className="fas fa-trophy" aria-hidden /> Showcase your achievements</li>
+                <li><i className="fas fa-chart-line" aria-hidden /> Track your skill development</li>
+                <li><i className="fas fa-handshake" aria-hidden /> Direct path to job opportunities</li>
+                <li><i className="fas fa-star" aria-hidden /> Build a standout portfolio</li>
               </ul>
             </div>
           </div>
@@ -63,7 +81,7 @@ export default function SignupPage() {
           <div className="right-section">
             <div className="right-content">
               <h2>Create your account</h2>
-              <p>Sign up to start applying for micro-internships and gigs.</p>
+              <p>Sign up to unlock exclusive access to micro-internships and build your professional future.</p>
 
               <form onSubmit={onSubmit} noValidate>
                 <div className="form-group">

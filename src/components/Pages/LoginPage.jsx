@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import './LoginPage.css';
 import { useAuth } from '../auth/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { authAPI, handleAPIError } from '../../services/api';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -10,8 +11,14 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [capsOn, setCapsOn] = useState(false);
+  const [remember, setRemember] = useState(true);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const emailValid = useMemo(() => /.+@+.+\..+/.test(email), [email]);
+
+  // Get the redirect path from location state
+  const from = location.state?.from || '/';
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -19,13 +26,24 @@ export default function LoginPage() {
       setError('Please fill in all fields');
       return;
     }
+    if (!emailValid) {
+      setError('Please enter a valid email address');
+      return;
+    }
+    
     setLoading(true);
-    // simulate login
-    await new Promise((r) => setTimeout(r, 800));
-    setLoading(false);
     setError('');
-    login({ email });
-    navigate('/');
+    
+    try {
+      const data = await authAPI.login({ email, password });
+      login(data.user, data.token);
+      navigate(from);
+    } catch (error) {
+      const errorMessage = handleAPIError(error);
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -34,23 +52,29 @@ export default function LoginPage() {
         <div className="login-content">
           <div className="left-section">
             <div className="left-content">
-              <h2>Launch Your Career with Micro-Internships</h2>
+              <h2>Welcome to the Future of Learning</h2>
               <p>
-                Gain practical experience while balancing your academic commitments. Build your
-                professional portfolio with real-world projects.
+                Join thousands of students who are building their careers through hands-on micro-internships. 
+                Transform your academic knowledge into real-world expertise.
               </p>
               <ul className="features">
                 <li>
-                  <i className="fas fa-check" aria-hidden /> Industry-relevant projects with expert guidance
+                  <i className="fas fa-rocket" aria-hidden /> Launch your career with real projects
                 </li>
                 <li>
-                  <i className="fas fa-check" aria-hidden /> Flexible timelines tailored for students
+                  <i className="fas fa-users" aria-hidden /> Connect with industry mentors
                 </li>
                 <li>
-                  <i className="fas fa-check" aria-hidden /> Professional mentorship and feedback
+                  <i className="fas fa-clock" aria-hidden /> Flexible scheduling around your studies
                 </li>
                 <li>
-                  <i className="fas fa-check" aria-hidden /> Certificate upon completion
+                  <i className="fas fa-certificate" aria-hidden /> Earn certificates that matter
+                </li>
+                <li>
+                  <i className="fas fa-briefcase" aria-hidden /> Build a portfolio that stands out
+                </li>
+                <li>
+                  <i className="fas fa-graduation-cap" aria-hidden /> Learn skills employers want
                 </li>
               </ul>
             </div>
@@ -60,6 +84,13 @@ export default function LoginPage() {
             <div className="right-content">
               <h2>Welcome Back</h2>
               <p>Sign in to access your Bitskill India account and continue your journey.</p>
+
+              {from !== '/' && (
+                <div className="redirect-message">
+                  <i className="fas fa-info-circle"></i>
+                  Please log in to access this page
+                </div>
+              )}
 
               <div className="social-login" aria-label="Social login options">
                 <button type="button" className="social-btn google-btn">
@@ -89,10 +120,16 @@ export default function LoginPage() {
                       required
                     />
                   </div>
+                  {!!email && !emailValid && (
+                    <div className="hint" role="status" aria-live="polite">Invalid email format</div>
+                  )}
                 </div>
 
                 <div className="form-group">
                   <label htmlFor="login-password">Password</label>
+                  {!!email && !emailValid && (
+                    <div className="hint" role="status" aria-live="polite">Invalid email format</div>
+                  )}
                   <div className="input-with-icon password-field">
                     <i className="fas fa-lock" aria-hidden />
                     <input
@@ -121,15 +158,23 @@ export default function LoginPage() {
                   )}
                 </div>
 
-                <a href="#" className="forgot-password">
-                  Forgot password?
-                </a>
+                <div className="row-between">
+                  <label className="checkbox">
+                    <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} />
+                    Remember me
+                  </label>
+                  <a href="#" className="forgot-password">Forgot password?</a>
+                </div>
+
                 {error && (
                   <div className="form-error" role="alert" aria-live="assertive">{error}</div>
                 )}
+
                 <button className="login-btn" type="submit" disabled={loading} aria-busy={loading}>
-                  {loading ? 'Logging in…' : 'Log In'}
+                  {loading ? <span className="spinner" aria-hidden /> : 'Log In'}
                 </button>
+
+                <p className="alt-link">Don’t have an account? <a href="/signup">Sign up</a></p>
               </form>
             </div>
           </div>
