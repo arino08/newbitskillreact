@@ -1,24 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 function Subscribe() {
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [consent, setConsent] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`Thanks! You are subscribed with ${email}${phone ? ' / ' + phone : ''}`);
-    setEmail('');
-    setPhone('');
+    alert(
+      `Thanks! You are subscribed with ${email}${phone ? " / " + phone : ""}`
+    );
+    setEmail("");
+    setPhone("");
     setConsent(false);
   };
 
   return (
     <div className="container section-container" aria-label="Subscribe section">
-      <h2 style={{ fontWeight: 900, margin: '0 0 8px 0', color: 'white', textAlign: 'center' }}>Join Our Community</h2>
-      <p style={{ margin: 0, color: 'var(--muted)', textAlign: 'center' }}>
-        By joining our mailing list, you’ll be the first to know about our newest features,
-        exclusive discounts, and upcoming events. Stay informed and connected with us.
+      <h2
+        style={{
+          fontWeight: 900,
+          margin: "0 0 8px 0",
+          color: "white",
+          textAlign: "center",
+        }}
+      >
+        Join Our Community
+      </h2>
+      <p style={{ margin: 0, color: "var(--muted)", textAlign: "center" }}>
+        By joining our mailing list, you’ll be the first to know about our
+        newest features, exclusive discounts, and upcoming events. Stay informed
+        and connected with us.
       </p>
       <div className="subscribe-wrapper">
         <div className="info">
@@ -52,9 +64,12 @@ function Subscribe() {
                 checked={consent}
                 onChange={(e) => setConsent(e.target.checked)}
                 required
-              /> I agree to receive all emails and updates.
+              />{" "}
+              I agree to receive all emails and updates.
             </label>
-            <button type="submit" className="btn">Submit</button>
+            <button type="submit" className="btn">
+              Submit
+            </button>
           </form>
         </div>
       </div>
