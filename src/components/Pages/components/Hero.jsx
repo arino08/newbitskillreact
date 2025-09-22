@@ -3,6 +3,7 @@ import React from "react";
 function Hero() {
   return (
     <section className="hero">
+      <div className="hero-stripe"></div>
       <div className="container hero-content">
         <h1>Connect. Learn. Earn.</h1>
         <p>

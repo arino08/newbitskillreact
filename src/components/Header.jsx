@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+// using in-page anchors for scrolling to sections
 
 function Header() {
   const [searchActive, setSearchActive] = useState(false);
@@ -14,25 +15,15 @@ function Header() {
             <div className="logo-icon">B</div>
             Bitskill India
           </a>
-          <nav aria-label="Main navigation">
-            <ul>
-              <li>
-                <a href="#">Home</a>
-              </li>
-              <li>
-                <a href="#">Find Gigs</a>
-              </li>
-              <li>
-                <a href="#">Post a Project</a>
-              </li>
-              <li>
-                <a href="#">How It Works</a>
-              </li>
-              <li>
-                <a href="#">About</a>
-              </li>
-            </ul>
-          </nav>
+            <nav aria-label="Main navigation">
+              <ul>
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#trending-gigs">Find Gigs</a></li>
+                <li><a href="#subscribe">Post a Project</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#key-features">About</a></li>
+              </ul>
+            </nav>
           <div className="header-actions">
             <div
               className={`search-wrapper${searchActive ? " active" : ""}`}
@@ -60,12 +51,8 @@ function Header() {
               </button>
             </div>
             <div className="auth-buttons">
-              <a className="btn btn-outline" href="login.html">
-                Login
-              </a>
-              <a className="btn btn-outline" href="signup.html">
-                Sign Up
-              </a>
+              <a className="btn btn-outline" href="/login">Login</a>
+              <a className="btn btn-outline" href="/signup">Sign Up</a>
             </div>
           </div>
         </div>

@@ -8,14 +8,26 @@ import Subscribe from "./components/Subscribe";
 
 const HomePage = () => {
   return (
-    <>
-      <Hero />
-      <TrendingGigs />
-      <HowItWorks />
-      <KeyFeatures />
-      <QAChat />
-      <Subscribe />
-    </>
+    <main>
+      <section id="hero">
+        <Hero />
+      </section>
+      <section id="trending-gigs">
+        <TrendingGigs />
+      </section>
+      <section id="how-it-works">
+        <HowItWorks />
+      </section>
+      <section id="key-features">
+        <KeyFeatures />
+      </section>
+      <section id="qa-chat">
+        <QAChat />
+      </section>
+      <section id="subscribe">
+        <Subscribe />
+      </section>
+    </main>
   );
 };
 
