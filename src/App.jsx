@@ -8,19 +8,19 @@ import SignupPage from './components/Pages/SignupPage'
 
 function App() {
   const location = useLocation();
-  const trimHeader = location.pathname.startsWith('/login') || location.pathname.startsWith('/signup');
-  const displayNavLinks = trimHeader ? false : true;
+  const isAuthRoute = location.pathname.startsWith('/login') || location.pathname.startsWith('/signup');
+  const displayNavLinks = isAuthRoute ? false : true;
 
   return (
     <div id="main-page" className="page-container" style={{ width: '100%' }}>
-      <Header displayNavLinks={displayNavLinks} />
+  {!isAuthRoute && <Header displayNavLinks={displayNavLinks} />}
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      <Footer />
+  {!isAuthRoute && <Footer />}
     </div>
   )
 }

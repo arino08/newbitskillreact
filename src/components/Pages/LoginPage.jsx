@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
 import './LoginPage.css';
+import { useAuth } from '../auth/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) return alert('Please fill in all fields');
     setLoading(true);
     // simulate login
-    await new Promise((r) => setTimeout(r, 1200));
+    await new Promise((r) => setTimeout(r, 800));
     setLoading(false);
-    alert('Login successful! (demo)');
+    login({ email });
+    navigate('/');
   };
 
   return (

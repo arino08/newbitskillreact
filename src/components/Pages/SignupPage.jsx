@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
 import './SignupPage.css';
+import { useAuth } from '../auth/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignupPage() {
   const [form, setForm] = useState({ fullName: '', email: '', password: '', role: 'student' });
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const update = (e) => setForm({ ...form, [e.target.name]: e.target.value });
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!form.fullName || !form.email || !form.password) return alert('All fields are required');
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1200));
+    await new Promise((r) => setTimeout(r, 800));
     setLoading(false);
-    alert('Signup successful! (demo)');
+    login({ email: form.email, name: form.fullName });
+    navigate('/');
   };
 
   return (
@@ -60,6 +65,7 @@ export default function SignupPage() {
                     <i className="fas fa-lock" aria-hidden />
                     <input id="password" name="password" type="password" value={form.password} onChange={update} placeholder="Create a password" required />
                   </div>
+                  {/* TODO: add live strength indicator */}
                 </div>
 
                 <div className="form-group">
