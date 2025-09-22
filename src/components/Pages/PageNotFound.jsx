@@ -6,4 +6,4 @@ const PageNotFound = () => {
   )
 }
 
-export default PageNotFoundasdas
+export default PageNotFound
