@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import './SignupPage.css';
 import { useAuth } from '../auth/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -8,14 +8,37 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [capsOn, setCapsOn] = useState(false);
+  const [error, setError] = useState('');
+
+  const strength = useMemo(() => {
+    const v = form.password || '';
+    const rules = {
+      length: v.length >= 8,
+      upper: /[A-Z]/.test(v),
+      number: /\d/.test(v),
+      special: /[^A-Za-z0-9]/.test(v),
+    };
+    const passed = Object.values(rules).filter(Boolean).length;
+    return { rules, score: passed };
+  }, [form.password]);
 
   const update = (e) => setForm({ ...form, [e.target.name]: e.target.value });
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!form.fullName || !form.email || !form.password) return alert('All fields are required');
+    if (!form.fullName || !form.email || !form.password) {
+      setError('All fields are required');
+      return;
+    }
+    if (strength.score < 3) {
+      setError('Please choose a stronger password');
+      return;
+    }
     setLoading(true);
     await new Promise((r) => setTimeout(r, 800));
     setLoading(false);
+    setError('');
     login({ email: form.email, name: form.fullName });
     navigate('/');
   };
@@ -61,11 +84,44 @@ export default function SignupPage() {
 
                 <div className="form-group">
                   <label htmlFor="password">Password</label>
-                  <div className="input-with-icon">
+                  <div className="input-with-icon password-field">
                     <i className="fas fa-lock" aria-hidden />
-                    <input id="password" name="password" type="password" value={form.password} onChange={update} placeholder="Create a password" required />
+                    <input
+                      id="password"
+                      name="password"
+                      type={showPassword ? 'text' : 'password'}
+                      value={form.password}
+                      onChange={update}
+                      onKeyUp={(e) => setCapsOn(e.getModifierState && e.getModifierState('CapsLock'))}
+                      placeholder="Create a password"
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="toggle-visibility"
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      onClick={() => setShowPassword((v) => !v)}
+                    >
+                      <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`} aria-hidden />
+                    </button>
                   </div>
-                  {/* TODO: add live strength indicator */}
+                  {capsOn && (
+                    <div className="caps-warning" role="status" aria-live="polite">
+                      Caps Lock is on
+                    </div>
+                  )}
+                  <div className="strength-meter" aria-hidden>
+                    <div className={`bar ${strength.score >= 1 ? 'on' : ''}`} />
+                    <div className={`bar ${strength.score >= 2 ? 'on' : ''}`} />
+                    <div className={`bar ${strength.score >= 3 ? 'on' : ''}`} />
+                    <div className={`bar ${strength.score >= 4 ? 'on' : ''}`} />
+                  </div>
+                  <ul className="pw-rules" aria-live="polite">
+                    <li className={strength.rules.length ? 'ok' : ''}>At least 8 characters</li>
+                    <li className={strength.rules.upper ? 'ok' : ''}>One uppercase letter</li>
+                    <li className={strength.rules.number ? 'ok' : ''}>One number</li>
+                    <li className={strength.rules.special ? 'ok' : ''}>One special character</li>
+                  </ul>
                 </div>
 
                 <div className="form-group">
@@ -80,6 +136,9 @@ export default function SignupPage() {
                   </div>
                 </div>
 
+                {error && (
+                  <div className="form-error" role="alert" aria-live="assertive">{error}</div>
+                )}
                 <button type="submit" className="submit-btn" disabled={loading} aria-busy={loading}>
                   {loading ? 'Creating account…' : 'Create Account'}
                 </button>

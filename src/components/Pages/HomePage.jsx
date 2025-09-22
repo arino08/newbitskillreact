@@ -5,27 +5,40 @@ import HowItWorks from "./components/HowItWorks";
 import KeyFeatures from "./components/KeyFeatures";
 import QAChat from "./components/QAChat";
 import Subscribe from "./components/Subscribe";
+import AnimateOnScroll from "../AnimateOnScroll";
 
 const HomePage = () => {
   return (
     <main>
       <section id="hero">
-        <Hero />
+        <AnimateOnScroll variant="zoom-in">
+          <Hero />
+        </AnimateOnScroll>
       </section>
       <section id="trending-gigs">
-        <TrendingGigs />
+        <AnimateOnScroll variant="fade-up" delay={80}>
+          <TrendingGigs />
+        </AnimateOnScroll>
       </section>
       <section id="how-it-works">
-        <HowItWorks />
+        <AnimateOnScroll variant="fade-up" delay={120}>
+          <HowItWorks />
+        </AnimateOnScroll>
       </section>
       <section id="key-features">
-        <KeyFeatures />
+        <AnimateOnScroll variant="fade-up" delay={160}>
+          <KeyFeatures />
+        </AnimateOnScroll>
       </section>
       <section id="qa-chat">
-        <QAChat />
+        <AnimateOnScroll variant="fade-up" delay={180}>
+          <QAChat />
+        </AnimateOnScroll>
       </section>
       <section id="subscribe">
-        <Subscribe />
+        <AnimateOnScroll variant="fade-up" delay={200}>
+          <Subscribe />
+        </AnimateOnScroll>
       </section>
     </main>
   );

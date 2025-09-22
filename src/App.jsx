@@ -5,6 +5,7 @@ import './App.css'
 import HomePage from './components/Pages/HomePage'
 import LoginPage from './components/Pages/LoginPage'
 import SignupPage from './components/Pages/SignupPage'
+import Background from './components/Background'
 
 function App() {
   const location = useLocation();
@@ -13,7 +14,9 @@ function App() {
 
   return (
     <div id="main-page" className="page-container" style={{ width: '100%' }}>
-  {!isAuthRoute && <Header displayNavLinks={displayNavLinks} />}
+  {!isAuthRoute && <Background />}
+  {/* Show header on all routes; hide its nav links on auth via prop */}
+  <Header displayNavLinks={displayNavLinks} />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />

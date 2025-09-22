@@ -7,6 +7,7 @@ import AuthLinks from "./Pages/components/AuthLinks";
 
 function Header({displayNavLinks}) {
   const [searchActive, setSearchActive] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const openSearch = () => setSearchActive(true);
   const closeSearch = () => setSearchActive(false);
@@ -20,9 +21,26 @@ function Header({displayNavLinks}) {
             Bitskill India
           </Link>
 
-          {displayNavLinks && <NavLinks />}
+          {displayNavLinks && (
+            <div className={`nav-wrapper ${menuOpen ? 'open' : ''}`}>
+              <NavLinks />
+            </div>
+          )}
 
           <div className="header-actions">
+            {displayNavLinks && (
+              <button
+                className={`hamburger ${menuOpen ? 'is-active' : ''}`}
+                onClick={() => setMenuOpen((v) => !v)}
+                aria-label="Toggle menu"
+                aria-expanded={menuOpen}
+              >
+                <span />
+                <span />
+                <span />
+              </button>
+            )}
+
             {displayNavLinks && <Search
               searchActive={searchActive}
               openSearch={openSearch}

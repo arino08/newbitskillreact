@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import './LoginPage.css';
 import { useAuth } from '../auth/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -7,16 +7,23 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [capsOn, setCapsOn] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !password) return alert('Please fill in all fields');
+    if (!email || !password) {
+      setError('Please fill in all fields');
+      return;
+    }
     setLoading(true);
     // simulate login
     await new Promise((r) => setTimeout(r, 800));
     setLoading(false);
+    setError('');
     login({ email });
     navigate('/');
   };
@@ -86,24 +93,40 @@ export default function LoginPage() {
 
                 <div className="form-group">
                   <label htmlFor="login-password">Password</label>
-                  <div className="input-with-icon">
+                  <div className="input-with-icon password-field">
                     <i className="fas fa-lock" aria-hidden />
                     <input
                       id="login-password"
-                      type="password"
+                      type={showPassword ? 'text' : 'password'}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      onKeyUp={(e) => setCapsOn(e.getModifierState && e.getModifierState('CapsLock'))}
                       placeholder="Enter your password"
                       autoComplete="current-password"
                       required
                     />
+                    <button
+                      type="button"
+                      className="toggle-visibility"
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      onClick={() => setShowPassword((v) => !v)}
+                    >
+                      <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`} aria-hidden />
+                    </button>
                   </div>
+                  {capsOn && (
+                    <div className="caps-warning" role="status" aria-live="polite">
+                      Caps Lock is on
+                    </div>
+                  )}
                 </div>
 
                 <a href="#" className="forgot-password">
                   Forgot password?
                 </a>
-
+                {error && (
+                  <div className="form-error" role="alert" aria-live="assertive">{error}</div>
+                )}
                 <button className="login-btn" type="submit" disabled={loading} aria-busy={loading}>
                   {loading ? 'Logging in…' : 'Log In'}
                 </button>
